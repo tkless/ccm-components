@@ -76,9 +76,9 @@ ccm.component( {
     } ],
 
     news:           [ ccm.component, '../news/ccm.posts.js', {
-      html:         [ ccm.load,      '../news/posts_html.json' ],
-      style:        [ ccm.load,      '../news/posts.css' ],
-      store:        [ ccm.store,     '../news/posts.json' ],
+      html:         [ ccm.load,      '../news/templates.json' ],
+      style:        [ ccm.load,      '../news/style.css' ],
+      store:        [ ccm.store,     '../news/datastore.json' ],
       user:         null
     } ],
 

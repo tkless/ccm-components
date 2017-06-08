@@ -5,24 +5,24 @@
     padding: 0.6em;
 }
 
-.ccm-posts > .posts > .post > .close {
+.close {
     font-size: 1.2em;
     cursor: pointer;
     color: #84a266;
 }
 
-.ccm-posts > .posts,
-.ccm-posts > .posts > .post {
+.posts,
+.post {
     display: flex;
     flex-direction: column;
 }
 
-.ccm-posts > .posts > .post > .head {
+.head {
     display: flex;
     margin-bottom: 0.5em;
 }
 
-.ccm-posts > .posts > .post > .head > .title {
+.title {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -31,35 +31,36 @@
     font-family: "Arial", sans-serif;
 }
 
-.ccm-posts > .posts > .post > .head > .title {
+.title {
     order: 1;
 }
 
-.ccm-posts > .posts > .post > .head > .user > .name,
-.ccm-posts > .posts > .post > .head > .title > .date{
+.name,
+.date{
     order: 2;
     font-size: 70%;
     color: #909090;
 }
 
-.ccm-posts > .posts > .post > .head > .user {
+.user {
     display: flex;
     flex-direction: column;
     margin-right: 0.5em;
     align-content: center;
 }
 
-.ccm-posts > .posts > .post > .head > .title > div,
-.ccm-posts > .posts > .post > .content > div {
+.title div,
+.content div {
     display: inline-block;
 }
 
-.ccm-posts > .posts > .post > .head > .title > .empty:after,
-.ccm-posts > .posts > .post > .content > .empty:after {
+.title > .empty:after,
+.content > .empty:after {
     content: 'edit';
     color: silver;
 }
-.ccm-posts > .posts > .post {
+
+.post {
     margin: 0.5em 0 0.5em;
     padding: 0.7em;
     background-color: white;
