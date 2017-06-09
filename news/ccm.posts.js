@@ -16,7 +16,7 @@
 
         config: {
 
-            html:  [ 'ccm.load', '../news/templates.json' ],
+            templates:  [ 'ccm.store', '../news/templates.json' ],
             data:  {
               store: [ 'ccm.store', '../news/datastore.json' ],
               key: 'demo'
@@ -33,20 +33,25 @@
 
             this.start = function ( callback ) {
 
+
                 // login user if not logged in
                 if ( self.editable && !self.user.isLoggedIn() ) return self.user.login( function () { self.start( callback ); } );
 
                 // get dataset for rendering
-                self.ccm.helper.dataset( self.element, self.data.key, function ( dataset ) {
+                self.ccm.helper.dataset( self.data.store, self.data.key, function ( dataset ) {
 
                     if ( !dataset.posts ) dataset.posts = [];
 
+                    self.element.innerHTML = '';
+
+                    console.log(self.templates.get('main'));
+
                     // render main html structure
-                    self.element.appendChild( self.ccm.helper.html( self.html.main, {
+                    self.element.appendChild( self.ccm.helper.protect( self.ccm.helper.html( self.templates.get( 'main' ), {
                         click: function () {
                             updatePost();
                         }
-                    }));
+                    })));
 
                     for ( var i = 0; i < dataset.posts.length; i++ ) {
                         renderPost( dataset.posts[i], i) ;
@@ -76,7 +81,7 @@
 
                     function renderPost( post, i )  {
 
-                        ccm.helper.find( self, '.posts' ).prepend( ccm.helper.html( self.html.post, {
+                        self.element.querySelector( '.posts' ).insertBefore(  ccm.helper.html( self.templates.post, {
                             delete_post: function () {
                                 dataset.posts.splice(i, 1);
                                 updatePost();
@@ -89,13 +94,13 @@
                             content: ccm.helper.val ( post.content || "" ),
                             edit: !!self.editable,
                             input_title: function () {
-                                change( i, jQuery(this), "title" );
+                                change( i, jQuery( this ), "title" );
                             },
                             input_content: function () {
                                 change( i, jQuery( this ), "content" );
                             }
 
-                        } ) );
+                        } ),  self.element.querySelector( '.posts' ) );
                     }
 
                     function getDateTime () {
@@ -124,9 +129,9 @@
                         dataset.posts[post][prop] = ccm.helper.val( jQuery.trim( div.html().replace(new RegExp('\r?\n','g'), '') ) );
 
                         if (div.text().length == 0 )
-                            div.addClass("empty").html('');
+                            div.classList.add("empty").innerHTML = ' ';
                         else
-                            div.removeClass("empty");
+                            div.classList.remove("empty");
                     }
 
                     function newPost() {
