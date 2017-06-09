@@ -1,96 +1,83 @@
 {
-  "main":
-  [
+  "main": {
+    "tag": "div",
+    "id": "main",
+     "inner": [
     {
       "tag": "div",
-      "class": "button",
+      "id": "button",
       "inner":
-
-      {
-        "tag": "button",
-        "onclick": "%click%",
-        "inner": "posten"
-      }
+        {
+          "tag": "button",
+          "onclick": "%click%",
+          "inner": "posten"
+        }
     },
     {
       "tag": "div",
-      "class": "posts"
-    }
-  ],
-
-  "post":
-  [
-    {
-      "tag": "div",
-      "class": "post",
-      "inner":
-      [
-        {
-          "tag": "div",
-          "class": "close fa fw fa-close",
-          "onclick": "%delete_post%"
-        },
-        {
-          "tag": "div",
-          "class": "head",
-          "inner":
-          [
-
-            {
-              "tag": "div",
-              "class": "title",
-              "inner":
-              [
-                {
-                  "tag": "div",
-                  "class": "date",
-                  "inner": "%date%"
-                },
-
-               {
-                  "tag": "div",
-                  "inner": "%title%",
-                  "contenteditable": "%edit%",
-                  "oninput": "%input_title%"
-                }
-              ]
-            },
-
-            {
-              "tag": "div",
-              "class": "user",
-              "inner":
-              [
-                {
-                  "tag": "div",
-                  "class": "name",
-                  "inner": "%name%"
-                },
-
-                {
-                  "tag": "div",
-                  "class": "%avatar%"
-                }
-              ]
-            }
-
-          ]
-        },
-
-        {
-          "tag": "div",
-          "class": "content",
-          "inner":
-          {
-            "tag": "div",
-            "inner": "%content%",
-            "contenteditable": "%edit%",
-            "oninput": "%input_content%"
-          }
-        }
-
-      ]
+      "id": "posts"
     }
   ]
+  },
+
+  "post": {
+    "tag": "div",
+    "class": "post",
+    "inner": [
+      {
+        "tag": "div",
+        "class": "close fa fw fa-close",
+        "onclick": "%delete_post%"
+      },
+      {
+        "tag": "div",
+        "class": "head",
+        "inner": [
+          {
+            "tag": "div",
+            "class": "title",
+            "inner": [
+              {
+                "tag": "div",
+                "class": "date",
+                "inner": "%date%"
+              },
+              {
+                "tag": "div",
+                "inner": "%title%",
+                "contenteditable": "%edit%",
+                "oninput": "%input_title%"
+              }
+            ]
+          },
+          {
+            "tag": "div",
+            "class": "user",
+            "inner": [
+              {
+                "tag": "div",
+                "class": "name",
+                "inner": "%name%"
+              },
+              {
+                "tag": "div",
+                "class": "%avatar%"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tag": "div",
+        "class": "content",
+        "inner": {
+          "tag": "div",
+          "inner": "%content%",
+          "contenteditable": "%edit%",
+          "oninput": "%input_content%"
+        }
+      }
+    ]
+  }
 
 }

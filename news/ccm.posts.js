@@ -33,6 +33,12 @@
 
             this.start = function ( callback ) {
 
+                document.head.appendChild( self.ccm.helper.html( {
+                    tag:   'style',
+                    inner: "@font-face { font-family: 'FontAwesome'; src: url('../libs/font-awesome/fonts/fontawesome-webfont.eot?v=4.7.0'); src: url('../libs/font-awesome/fonts/fontawesome-webfont.eot?#iefix&v=4.7.0') format('embedded-opentype'), url('../libs/font-awesome/fonts/fontawesome-webfont.woff2?v=4.7.0') format('woff2'), url('../libs/font-awesome/fonts/fontawesome-webfont.woff?v=4.7.0') format('woff'), url('../libs/font-awesome/fonts/fontawesome-webfont.ttf?v=4.7.0') format('truetype'), url('../libs/font-awesome/fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg'); font-weight: normal; font-style: normal; }"
+                } ) );
+
+
 
                 // login user if not logged in
                 if ( self.editable && !self.user.isLoggedIn() ) return self.user.login( function () { self.start( callback ); } );
@@ -44,8 +50,6 @@
 
                     self.element.innerHTML = '';
 
-                    console.log(self.templates.get('main'));
-
                     // render main html structure
                     self.element.appendChild( self.ccm.helper.protect( self.ccm.helper.html( self.templates.get( 'main' ), {
                         click: function () {
@@ -53,16 +57,27 @@
                         }
                     })));
 
+                    self.element.appendChild( self.ccm.helper.protect( self.ccm.helper.html( self.templates.get( 'post' ) )  ) );
+
+
                     for ( var i = 0; i < dataset.posts.length; i++ ) {
                         renderPost( dataset.posts[i], i) ;
                     }
                     if ( self.editable )
                         renderPost( newPost(), dataset.posts.length );
 
-                    self.element.querySelector( '.post:first' ).classList.add( 'new_post' );
+                    /*
+                    var first = ccm.helper.find(self, '.post:first');
+                    first.addClass("new_post");
+                    //placehoder for empty content
+                    ccm.helper.find(self, first, 'div[contenteditable="true"]').addClass('empty');
+                    */
+
+                    self.element.querySelector( '#posts' ).firstChild.classList.add( 'new_post' );
 
                     //placehoder for empty content
-                    self.element.querySelector( 'div[contenteditable="true"]' ).classList.add( 'empty' );
+                    //if ( var div = self.element.querySelector( '.post' ).getAttribute( 'contenteditable' ) )
+                      //  div.classList.add( 'empty' );
 
                     // no close icon for emty post
                     self.element.querySelector( '.fa-close' ).classList.remove( '.fa-close' );
@@ -73,7 +88,7 @@
                      */
                     if ( !self.editable ) {
                         self.element.querySelector( '.fa-close' ).classList.remove( '.fa_close' );
-                        self.element.querySelector( '.button' ).classList.remove( '.button' );
+                        self.element.querySelector( '#button' ).removeAttribute( 'id' );
                     }
 
                     // perform callback
@@ -81,26 +96,32 @@
 
                     function renderPost( post, i )  {
 
-                        self.element.querySelector( '.posts' ).insertBefore(  ccm.helper.html( self.templates.post, {
+                        var posts = self.element.querySelector( '#posts' );
+                        var post_elem = self.ccm.helper.protect( self.ccm.helper.html( self.templates.get( 'post' ), {
                             delete_post: function () {
                                 dataset.posts.splice(i, 1);
                                 updatePost();
                             },
 
-                            title: ccm.helper.val( post.title || "" ),
-                            date: ccm.helper.val( post.date ),
-                            name: ccm.helper.val( post.user ),
-                            avatar: ccm.helper.val( post.avatar || 'fa fa-user fa-fw fa-lg' ),
-                            content: ccm.helper.val ( post.content || "" ),
-                            edit: !!self.editable,
+                            title:   post.title || "",
+                            date:    post.date,
+                            name:    post.user,
+                            avatar:  post.avatar || 'fa fa-user fa-fw fa-lg',
+                            content: post.content || "",
+                            edit:    self.editable,
+
                             input_title: function () {
                                 change( i, jQuery( this ), "title" );
                             },
                             input_content: function () {
                                 change( i, jQuery( this ), "content" );
                             }
+                        } ) );
 
-                        } ),  self.element.querySelector( '.posts' ) );
+                        if( posts.hasChildNodes() )
+                            posts.insertBefore( post_elem, posts.firstChild );
+                        else
+                            posts.appendChild( post_elem );
                     }
 
                     function getDateTime () {

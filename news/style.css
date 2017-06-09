@@ -11,7 +11,7 @@
     color: #84a266;
 }
 
-.posts,
+#posts,
 .post {
     display: flex;
     flex-direction: column;
@@ -69,7 +69,7 @@
     box-shadow: 0 0 3px #84a266;
 }
 
-.ccm-posts > .posts > .post > .head > .user > .fa {
+.user > .fa {
     font-size: 2.5em;
     padding: 0.1em 0 0.1em 0;
     color: #84a266;
