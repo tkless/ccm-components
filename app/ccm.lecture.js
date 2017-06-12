@@ -50,7 +50,7 @@ ccm.component( {
     } ],
 
     forum:          [ ccm.component, '../forum/ccm.forum.js', {
-      style:        [ ccm.load,      '../forum/forum.css' ],
+      style:        [ ccm.load,      '../forum/style.css' ],
       store:        [ ccm.store,     '../forum/forum.json'],
       lang:         null,
       user:         null

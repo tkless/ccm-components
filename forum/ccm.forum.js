@@ -10,7 +10,7 @@ ccm.component( {
 
     key:      'demo',
     store:    [ ccm.store, '../forum/datastore.json' ],
-    style:    [ ccm.load, '../forum/forum.css' ],
+    style:    [ ccm.load, '../forum/style.css' ],
     tejs:     [ ccm.load, 'https://cdnjs.cloudflare.com/ajax/libs/jquery-te/1.4.0/jquery-te.min.js' ],
     tecss:    [ ccm.load, 'https://cdnjs.cloudflare.com/ajax/libs/jquery-te/1.4.0/jquery-te.min.css' ]
 
