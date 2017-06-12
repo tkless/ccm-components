@@ -1,26 +1,11 @@
 /**
  * @overview <i>ccm</i> component for code trainer
- * @author Tea Kless <tmeskh2s@h-brs.de> 2016
- * @copyright Copyright (c) 2016 Bonn-Rhein-Sieg University of Applied Sciences
+ * @author Tea Kless <tea.kless@web.de> 2017
  * @license The MIT License (MIT)
  */
 
 ccm.component( {
-
-  /*-------------------------------------------- public component members --------------------------------------------*/
-
-  /**
-   * @summary component name
-   * @memberOf ccm.components.code_trainer
-   * @type {ccm.name}
-   */
   name: 'code_trainer',
-
-  /**
-   * @summary default instance configuration
-   * @memberOf ccm.components.code_trainer
-   * @type {ccm.components.code_trainer.config}
-   */
   config: {
 
     html:   [ ccm.load, '../codeTrainer/code_trainer_html.json' ],
@@ -33,30 +18,9 @@ ccm.component( {
 
   },
 
-  /*-------------------------------------------- public component classes --------------------------------------------*/
-
-  /**
-   * @summary constructor for creating <i>ccm</i> instances out of this component
-   * @alias ccm.components.code_trainer.Code_trainer
-   * @class
-   */
   Instance: function () {
-
-    /*------------------------------------- private and public instance members --------------------------------------*/
-
-    /**
-     * @summary own context
-     * @private
-     */
     var self = this;
 
-    /**
-     * @summary initialize <i>ccm</i> instance
-     * @description
-     * Called one-time when this <i>ccm</i> instance is created, all dependencies are solved and before dependent <i>ccm</i> components, instances and datastores are initialized.
-     * This method will be removed by <i>ccm</i> after the one-time call.
-     * @param {function} callback - callback when this instance is initialized
-     */
     this.init = function ( callback ) {
 
 
@@ -68,10 +32,6 @@ ccm.component( {
 
     };
 
-    /**
-     * @summary render content in own website area
-     * @param {function} [callback] - callback when content is rendered
-     */
     this.render = function ( callback ) {
 
       /**
@@ -144,31 +104,5 @@ ccm.component( {
     };
 
   }
-
-  /*------------------------------------------------ type definitions ------------------------------------------------*/
-
-  /**
-   * @namespace ccm.components.code_trainer
-   */
-
-  /**
-   * @summary <i>ccm</i> instance configuration
-   * @typedef {ccm.config} ccm.components.code_trainer.config
-   * @property {string} classes - css classes for own website area
-   * @property {ccm.element} element - own website area
-   * @property {Object.<ccm.key, ccm.html>} html - <i>ccm</i> html data templates for own content
-   * @property {ccm.key} key - key of [code_trainer dataset]{@link ccm.components.code_trainer.dataset} for rendering
-   * @property {ccm.instance} lang - <i>ccm</i> instance for multilingualism
-   * @property {ccm.store} store - <i>ccm</i> datastore that contains the [code_trainer dataset]{@link ccm.components.code_trainer.dataset} for rendering
-   * @property {ccm.style} style - css for own content
-   * ...
-   */
-
-  /**
-   * @summary code_trainer dataset for rendering
-   * @typedef {ccm.dataset} ccm.components.code_trainer.dataset
-   * @property {ccm.key} key - dataset key
-   * ...
-   */
 
 } );
