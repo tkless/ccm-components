@@ -1,0 +1,35 @@
+{
+  "main": {
+    "class": "questions",
+    "inner": [
+      {
+        "tag": "div",
+        "id": "main",
+        "inner": [
+          {
+            "tag": "div",
+            "id": "content"
+          },
+          {
+            "tag": "div",
+            "id": "post-editor"
+          },
+          {
+            "tag": "div",
+            "id":  "post-button",
+            "inner": {
+              "tag": "button",
+              "onclick": "%click%",
+              "inner": "posten"
+            }
+          }
+        ]
+      }
+    ]
+  },
+
+  "header": {
+    "tag": "div",
+    "class": "question_header"
+  }
+}
