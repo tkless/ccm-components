@@ -80,26 +80,19 @@
 
             self.ccm.helper.setContent( self.element, self.ccm.helper.protect( self.ccm.helper.html( self.templates.main, {
               up_vote:   function () {
-                  self.element.querySelector('#likes').classList.add('disabled');
-                  self.element.querySelector('#dislikes').classList.remove('disabled');
                   doVoting( 'likes' );
-                  console.log( 'likes', dataset.likes, Object.keys(dataset.likes).length );
-                  console.log( 'dislikes', dataset.dislikes, Object.keys(dataset.dislikes).length );
                   total++;
               },
               down_vote: function () {
-                  self.element.querySelector('#likes').classList.remove('disabled');
-                  self.element.querySelector('#dislikes').classList.add('disabled');
                   doVoting( 'dislikes' );
-                  console.log('likes', dataset.likes, Object.keys(dataset.likes).length );
-                  console.log('dislikes', dataset.dislikes, Object.keys(dataset.dislikes).length );
                   total--;
               }
             } ) ) );
 
             self.element.querySelector( '#total' ).innerHTML = total;
 
-            if ( !self.user ) {
+            //no voting possible without user instance
+            if ( !self.user || !self.user.isLoggedIn() ) {
                 self.element.querySelector('#likes').classList.add('disabled');
                 self.element.querySelector('#dislikes').classList.add('disabled');
             }
@@ -114,7 +107,7 @@
                 var user = self.user.data().key;
                 var not_vote;
 
-                if ( vote == 'likes' ) not_vote = 'dislikes';
+                if ( vote === 'likes' ) not_vote = 'dislikes';
                 else not_vote = 'likes';
 
                   // has already voted?
