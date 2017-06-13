@@ -1,0 +1,15 @@
+.fa-chevron-circle-up,
+.fa-chevron-circle-down {
+    cursor: pointer;
+}
+
+.disabled {
+    cursor: default;
+    color: lightgray;
+}
+
+#main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
