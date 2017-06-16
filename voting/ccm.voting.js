@@ -47,7 +47,7 @@
 
       Instance: function () {
         var self = this;
-        var total;
+        var total = 0;
 
         this.init = function ( callback ) {
 

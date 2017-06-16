@@ -13,22 +13,24 @@
       config: {
         templates: {
           "main": {
-             "tag": "fieldset",
-              "class" : "rating",
-              "onclick": "click"
+            "tag": "div",
+            "class" : "rating",
+            "onclick": "%click%"
           },
+
           "input": {
-              "tag": "input",
-               "type": "radio",
-               "name": "rating",
-               "id":   "%id%",
-               "value":"%star%"
-           },
+            "tag": "input",
+            "type": "radio",
+            "name": "rating",
+            "id":   "%id%",
+            "value":"%star%"
+          },
+
           "label": {
-              "tag": "label",
-              "class": "%class%",
-              "for": "%for%",
-              "title": "%title%"
+            "tag": "label",
+            "class": "%class%",
+            "for": "%for%",
+            "title": "%title%"
           }
         },
 
@@ -45,7 +47,7 @@
 
       Instance: function () {
         var self = this;
-        var total;
+        var total = 0;
 
         this.init = function ( callback ) {
 
@@ -73,17 +75,18 @@
           self.ccm.helper.dataset( self.data.store, self.data.key, function ( dataset ) {
             if ( !dataset ) dataset.star_rating = [];
 
-
-            //total = (Object.keys(dataset.likes).length)- (Object.keys(dataset.dislikes).length);
-
             self.ccm.helper.setContent( self.element, self.ccm.helper.protect( self.ccm.helper.html( self.templates.main, {
-                click: getCheckedStars()
+                click: function() {
+                    doVoting();
+                }
             } ) ) );
             
             renderStars();
 
-            total = ( Object.keys(dataset).length );
-            console.log( total );
+            for ( var i = 0.5; i <= 5; i += 0.5 ) {
+              if ( dataset[i] )
+                total += Object.keys(dataset[i]).length;
+              }
             
             function renderStars() {
 
@@ -101,9 +104,34 @@
                 }
             }
 
-            function getCheckedStars() {
-                var checked = self.element.querySelector( 'input[name = "rating"]:checked' ).value;
-                console.log(checked);
+            function doVoting() {
+                if ( !self.user )
+                    return;
+
+                self.user.login( function () {
+
+                    var checked;
+                    if ( self.element.querySelector( 'input[name = "rating"]:checked' ) !== null ) {
+                        checked = self.element.querySelector( 'input[name = "rating"]:checked' ).value;
+                    }
+
+                    var user = self.user.data().key;
+
+                    if ( dataset[ checked ][ user ] ) {
+                        // revert vote
+                        delete dataset[ checked ][ user ];
+                    }
+                    // not voted
+                    else {
+
+                        // proceed voting
+                        dataset[ checked ][ user ] = true;
+                    }
+
+                    // update dataset for rendering => (re)render own content
+                    self.data.store.set( dataset, function () { self.start(); } );
+
+                });
             }
 
             if ( callback )callback();
