@@ -1,3 +1,13 @@
+.main {
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapper {
+    display: flex;
+    align-items: center;
+}
+
 .rating {
     border: none;
     float: left;
@@ -33,3 +43,25 @@
 .rating > input:checked ~ label:hover,
 .rating > label:hover ~ input:checked ~ label, /* lighten current selection */
 .rating > input:checked ~ label:hover ~ label { color: #FFED85;  }
+
+
+* {box-sizing: border-box}
+
+#bars {
+    width: 100%;
+}
+
+/* Container for bars */
+.container {
+    width: 100%; /* Full width */
+    background-color: #ddd; /* Grey background */
+}
+
+.total {
+    text-align: right; /* Right-align text */
+    padding-right: 20px; /* Add some right padding */
+    line-height: 40px; /* Set the line-height to center the text inside the bar, and to expand the height of the container */
+    color: white; /* White text color */
+
+    background-color:  #FFD700;
+}
