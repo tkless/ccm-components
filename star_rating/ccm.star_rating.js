@@ -11,11 +11,13 @@
 
     name: component_name,
     config: {
+      modes: true, //rating possible
       templates: {
         "main": {
           "class": "main",
-          "inner": [ {
-            "class": "wrapper",
+          "inner": [
+            {
+            "id": "wrapper",
             "inner": [
               {
                 "class" : "rating"
@@ -26,10 +28,13 @@
             ]
             },
             {
-              "tag": "div",
               "id": "bars"
             }
           ]
+        },
+
+        "star": {
+          "class": "star fa fa-star fa-lg"
         },
 
         "input": {
@@ -47,12 +52,21 @@
           "for": "%for%",
           "title": "%title%"
         },
+
         "bar": {
-          "tag": "div",
-          "class": "container",
-          "inner": {
-            "class": "total"
-          }
+          "class": "bar",
+          "inner": [
+            {
+              "class": "stars",
+              "inner": "%% Sterne"
+            },
+            {
+              "class": "container",
+              "inner": {
+                "class": "percentage"
+              }
+            }
+          ]
         }
       },
 
@@ -102,8 +116,8 @@
           total = sum / count;
 
           //render html content
-          renderStars();
           renderBars();
+          renderStars();
 
           function renderStars() {
 
@@ -123,24 +137,36 @@
 
             self.element.querySelector( '#total-count' ).innerHTML = count;
 
-            if ( total < total + 0.5 )
-              self.element.querySelector( 'input[ id = "'+ Math.floor( total ) +'"]' ).checked = true;
-            else
-              self.element.querySelector( 'input[ id = "'+ Math.ceil( total ) +'"]' ).checked = true;
+            calculateChackedStars();
+
+            function calculateChackedStars() {
+              var y = parseInt( total * 100 % 100 );
+              var z = parseInt( total ) + ( y < 25 ? 0 : ( y >= 75 ? 1 : 0.5 ) );
+
+              self.element.querySelector( 'input[ id = "'+ z +'" ]' ).checked = true;
+            }
           }
 
           function renderBars() {
 
             for ( var i = 5; i >= 1; i-- ){
-              var bar = self.ccm.helper.protect( self.ccm.helper.html( self.templates.bar ) );
-              bar.classList.add( i );
+              var bar = self.ccm.helper.protect( self.ccm.helper.html( self.templates.bar, i ) );
               self.element.querySelector( '#bars' ).appendChild( bar );
 
-              if ( dataset[ i ] )
-                self.element.querySelector( '.' + i ).innerHTML = Object.keys( dataset[ i ] ).length;
+              //render bar
+              var percentage_div = bar.querySelector( '.percentage' );
+              var percentage = 0;
+
+              if ( dataset[i] ) {
+                percentage_div.innerHTML = Object.keys( dataset[ i ] ).length;
+                percentage =  ( Object.keys( dataset[ i ] ).length * 100 ) / count ;
+              }
+              else
+                percentage_div.innerHTML = '';
+
+              percentage_div.style.width = percentage + '%';
             }
           }
-              elem.classList.add( i );
 
           function doVoting() {
             if ( !self.user )
@@ -156,14 +182,14 @@
                 dataset[ checked ] = {};
 
               if ( dataset[ checked ][ user ] ) {
-                  // revert vote
-                  delete dataset[ checked ][ user ];
+                // revert vote
+                delete dataset[ checked ][ user ];
               }
               // not voted
               else {
 
-                  // proceed voting
-                  dataset[ checked ][ user ] = true;
+                // proceed voting
+                dataset[ checked ][ user ] = true;
               }
 
               // update dataset for rendering => (re)render own content
