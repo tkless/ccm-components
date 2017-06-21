@@ -73,8 +73,10 @@
           } ) );
 
           self.ccm.helper.dataset( self.data.store, self.data.key, function ( dataset ) {
-            if ( !dataset ) dataset.voting = [];
-
+            if ( !dataset ) {
+              dataset.likes = {};
+              dataset.dislikes = {};
+            }
 
             total = (Object.keys(dataset.likes).length)- (Object.keys(dataset.dislikes).length);
 

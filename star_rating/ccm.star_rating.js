@@ -47,7 +47,7 @@
           "for": "%for%",
           "title": "%title%"
         },
-        "bars": {
+        "bar": {
           "tag": "div",
           "class": "container",
           "inner": {
@@ -96,7 +96,7 @@
           var count = 0;
 
           for ( var key in dataset ) {
-            sum += key* Object.keys( dataset[ key ] ).length;
+            sum += key  * Object.keys( dataset[ key ] ).length;
             count += Object.keys(dataset[ key ] ).length;
           }
           total = sum / count;
@@ -124,21 +124,23 @@
             self.element.querySelector( '#total-count' ).innerHTML = count;
 
             if ( total < total + 0.5 )
-              self.element.querySelector( 'input[id = "'+ Math.floor( total ) +'"]' ).checked = true;
+              self.element.querySelector( 'input[ id = "'+ Math.floor( total ) +'"]' ).checked = true;
             else
-              self.element.querySelector( 'input[id = "'+ Math.ceil( total ) +'"]' ).checked = true;
+              self.element.querySelector( 'input[ id = "'+ Math.ceil( total ) +'"]' ).checked = true;
           }
 
           function renderBars() {
 
             for ( var i = 5; i >= 1; i-- ){
-              var elem = self.element.querySelector( '#bars' ).appendChild( self.ccm.helper.protect( self.ccm.helper.html( self.templates.bars ) ) );
-              elem.classList.add( i );
+              var bar = self.ccm.helper.protect( self.ccm.helper.html( self.templates.bar ) );
+              bar.classList.add( i );
+              self.element.querySelector( '#bars' ).appendChild( bar );
 
               if ( dataset[ i ] )
-                self.element.querySelector( '.'+ i + '> .total').innerHTML = Object.keys( dataset[ i ] ).length;
+                self.element.querySelector( '.' + i ).innerHTML = Object.keys( dataset[ i ] ).length;
             }
           }
+              elem.classList.add( i );
 
           function doVoting() {
             if ( !self.user )
