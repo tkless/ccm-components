@@ -6,14 +6,30 @@
 ( function () {
   var ccm_version = '8.0.0';
   var ccm_url     = '../libs/ccm.js';
-  var component_name = 'star_rating';
+  var component_name = 'star_rating_result';
   var component_obj  = {
 
     name: component_name,
     config: {
       templates: {
         "main": {
-          "class" : "rating"
+          "class": "main",
+          "inner": [
+            {
+            "id": "reviewed_stars",
+            "inner": [
+              {
+                "class" : "rating"
+              },
+              {
+                "id": "total-count"
+              }
+            ]
+            },
+            {
+              "id": "bars"
+            }
+          ]
         },
 
         "input": {
@@ -21,40 +37,43 @@
           "type": "radio",
           "name": "rating",
           "id":   "%id%",
-          "value":"%star%",
-          "onclick": "%click%"
+          "value":"%star%"
         },
 
         "label": {
           "tag": "label",
-          "class": "label",
-          "for": "%for%",
-          "title": "%title%"
+          "class": "%class%",
+          "for": "%for%"
+        },
+
+        "bar": {
+          "class": "bar",
+          "inner": [
+            {
+              "class": "stars",
+              "inner": "%% Sterne"
+            },
+            {
+              "class": "container",
+              "inner": {
+                "class": "percentage"
+              }
+            }
+          ]
         }
       },
 
       data:  {
-          store: [ 'ccm.store', '../star_rating/datastore.json' ],
+          store: [ 'ccm.store', '../star_rating_result/datastore.json' ],
           key:   'demo'
       },
-      user:  [ 'ccm.instance', 'https://akless.github.io/ccm-components/user/ccm.user.min.js'],
-      style: [ 'ccm.load', '../star_rating/style.css' ],
-      icons: [ 'ccm.load', 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'],
-      star_title: [ "Gefällt mir gar nicht", "Gefällt mir nicht",
-                    "Ist Ok", "Gefällt mir", "Gefällt mir sehr" ]
+      style: [ 'ccm.load', '../star_rating_result/style.css' ],
+      icons: [ 'ccm.load', 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css']
     },
 
     Instance: function () {
       var self = this;
       var total = 0;
-
-      this.init = function ( callback ) {
-
-        // listen to change event of ccm realtime datastore => (re)render own content
-        self.data.store.onChange = function () { self.start(); };
-
-        callback();
-      };
 
       this.start = function ( callback ) {
 
@@ -79,52 +98,54 @@
           total = sum / count;
 
           //render html content
+          renderBars();
           renderStars();
 
           function renderStars() {
 
-            for ( var i = 5; i >= 1; i-- ) {
+            for ( var i = 5; i >= 0.5; i -= 0.5 ) {
               self.element.querySelector( '.rating' ).appendChild( self.ccm.helper.protect( self.ccm.helper.html( self.templates.input, {
                 id: i,
                 star: i,
-                click: function() { doVoting(); }
               } ) ) );
 
               self.element.querySelector( '.rating' ).appendChild( self.ccm.helper.protect( self.ccm.helper.html( self.templates.label, {
+                class: ( ( i * 2 ) % 2 === 0) ? "full" : "half",
                 for: i,
-                title: ( i === 0.5 ) ? self.star_title[ 0 ] : self.star_title[ ( i * 2 ) - 1 ]
               } ) ) );
+            }
+
+            self.element.querySelector( '#total-count' ).innerHTML = count;
+
+            calculateChackedStars();
+
+            function calculateChackedStars() {
+              var y = parseInt( total * 100 % 100 );
+              var z = parseInt( total ) + ( y < 25 ? 0 : ( y >= 75 ? 1 : 0.5 ) );
+
+              self.element.querySelector( 'input[ id = "'+ z +'" ]' ).checked = true;
             }
           }
 
-          function doVoting() {
-            if ( !self.user )
-                return;
+          function renderBars() {
 
-            self.user.login( function () {
+            for ( var i = 5; i >= 1; i-- ){
+              var bar = self.ccm.helper.protect( self.ccm.helper.html( self.templates.bar, i ) );
+              self.element.querySelector( '#bars' ).appendChild( bar );
 
-              var checked = self.element.querySelector( 'input[name = "rating"]:checked' ).value;
+              //render bar
+              var percentage_div = bar.querySelector( '.percentage' );
+              var percentage = 0;
 
-              var user = self.user.data().key;
-
-              if ( !dataset[ checked ] )
-                dataset[ checked ] = {};
-
-              if ( dataset[ checked ][ user ] ) {
-                // revert vote
-                delete dataset[ checked ][ user ];
+              if ( dataset[i] ) {
+                percentage_div.innerHTML = Object.keys( dataset[ i ] ).length;
+                percentage =  ( Object.keys( dataset[ i ] ).length * 100 ) / count ;
               }
-              // not voted
-              else {
+              else
+                percentage_div.innerHTML = '';
 
-                // proceed voting
-                dataset[ checked ][ user ] = true;
-              }
-
-              // update dataset for rendering => (re)render own content
-              //self.data.store.set( dataset, function () { console.log(dataset); self.start(); } );
-
-            });
+              percentage_div.style.width = percentage + '%';
+            }
           }
 
           if ( callback )callback();
