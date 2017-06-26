@@ -37,7 +37,7 @@
           store: [ 'ccm.store', '../star_rating/datastore.json' ],
           key:   'demo'
       },
-      user:  [ 'ccm.instance', 'https://akless.github.io/ccm-components/user/ccm.user.min.js'],
+      user:  [ 'ccm.instance', 'https://akless.github.io/ccm-components/user/ccm.user.min.js', { logged_in: true }],
       style: [ 'ccm.load', '../star_rating/style.css' ],
       icons: [ 'ccm.load', 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'],
       star_title: [ "Gefällt mir gar nicht", "Gefällt mir nicht",
@@ -46,7 +46,6 @@
 
     Instance: function () {
       var self = this;
-      var total = 0;
 
       this.init = function ( callback ) {
 
@@ -64,49 +63,40 @@
         } ) );
 
         self.ccm.helper.dataset( self.data.store, self.data.key, function ( dataset ) {
-          if ( !dataset ) dataset = {};
 
-          self.ccm.helper.setContent( self.element, self.ccm.helper.protect( self.ccm.helper.html( self.templates.main ) ) );
+          var main_elem = self.ccm.helper.html( self.templates.main );
 
-          //calculate average of rating
-          var sum = 0;
-          var count = 0;
-
-          for ( var key in dataset ) {
-            if ( key !== "key" ) {
-              sum += key * Object.keys( dataset[ key ] ).length;
-              count += Object.keys( dataset[ key ] ).length;
-            }
-          }
-          total = sum / count;
-
-          //render html content
+          // render html content
           renderStars();
+
 
           function renderStars() {
 
             for ( var i = 5; i >= 1; i-- ) {
-              self.element.querySelector( '.rating' ).appendChild( self.ccm.helper.protect( self.ccm.helper.html( self.templates.input, {
+              var input_elem = self.ccm.helper.html( self.templates.input, {
                 id: i,
                 star: i,
-                click: function() { doVoting(); }
-              } ) ) );
+                click: function () { if ( self.user ) doVoting(); }
+              } );
 
-              self.element.querySelector( '.rating' ).appendChild( self.ccm.helper.protect( self.ccm.helper.html( self.templates.label, {
+              if ( self.user && self.user.isLoggedIn() && dataset[ i ] && dataset[ i ][ self.user.data().key ] ) input_elem.checked = true;
+              main_elem.appendChild( input_elem );
+
+              main_elem.appendChild( self.ccm.helper.html( self.templates.label, {
                 for: i,
-                title: ( i === 0.5 ) ? self.star_title[ 0 ] : self.star_title[ ( i * 2 ) - 1 ]
-              } ) ) );
+                title: self.star_title[ i - 1 ]
+              } ) );
             }
+
+            self.ccm.helper.setContent( self.element, self.ccm.helper.protect( main_elem ) );
 
           }
 
           function doVoting() {
-            if ( !self.user )
-                return;
 
             self.user.login( function () {
 
-              var checked = self.element.querySelector( 'input[name = "rating"]:checked' ).value;
+              var checked = self.element.querySelector( 'input[name="rating"]:checked' ).value;
 
               var user = self.user.data().key;
 
@@ -120,12 +110,16 @@
               // not voted
               else {
 
+                for ( var key in dataset ) {
+                  if ( dataset[ key ][ user ] ) delete dataset[ key ][ user ];
+                }
+
                 // proceed voting
                 dataset[ checked ][ user ] = true;
               }
 
               // update dataset for rendering => (re)render own content
-              //self.data.store.set( dataset, function () { self.start(); } );
+              self.data.store.set( dataset, function () { self.start(); } );
 
             });
           }
@@ -134,10 +128,6 @@
         } );
 
       };
-
-      this.getVoting = function () {
-       return total;
-      }
 
     }
   };
