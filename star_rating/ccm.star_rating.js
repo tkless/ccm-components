@@ -73,8 +73,10 @@
           var count = 0;
 
           for ( var key in dataset ) {
-            sum += key  * Object.keys( dataset[ key ] ).length;
-            count += Object.keys(dataset[ key ] ).length;
+            if ( key !== "key" ) {
+              sum += key * Object.keys( dataset[ key ] ).length;
+              count += Object.keys( dataset[ key ] ).length;
+            }
           }
           total = sum / count;
 
@@ -95,6 +97,7 @@
                 title: ( i === 0.5 ) ? self.star_title[ 0 ] : self.star_title[ ( i * 2 ) - 1 ]
               } ) ) );
             }
+
           }
 
           function doVoting() {
@@ -122,7 +125,7 @@
               }
 
               // update dataset for rendering => (re)render own content
-              //self.data.store.set( dataset, function () { console.log(dataset); self.start(); } );
+              //self.data.store.set( dataset, function () { self.start(); } );
 
             });
           }
