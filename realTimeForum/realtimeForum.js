@@ -15,29 +15,93 @@
 
     config: {
       templates: {
-        "main": {
-          "id": "questions-list",
-          "inner": [
-            {
-              "tag": "div",
-              "id": "question-overview"
-            },
-            {
-              "tag": "div",
-              "id": "question-summery",
-              "class": "bg-warning"
-            },
-            {
-              "id": "editor"
-            }
-          ]
+        "main":  {
+          "class": "container",
+          "inner":
+            [
+              {
+                "id": "questions-list",
+                "inner": [
+                  {
+                    "tag": "div",
+                    "id": "question-overview"
+                  },
+                  {
+                    "tag": "div",
+                    "id": "question-summery",
+                    "class": "bg-info"
+                  },
+                  {
+                    "tag": "hr"
+                  }
+                ]
+              },
+
+              {
+                "tag": "form",
+                "inner": [
+                  {
+                    "id": "new-question-title"
+                  },
+                  {
+                    "id": "editor-container",
+                    "inner": [
+                      {
+                        "id": "form"
+                      },
+                      {
+                        "id": "editor"
+                      }
+                    ]
+                  },
+                  {
+                    "class": "button row",
+                    "inner": {
+                      "tag": "button",
+                      "class": "btn btn-primary",
+                      "type": "submit",
+                      "inner": "Post Question"
+                    }
+                  }
+                ]
+              }
+            ]
         },
 
         "question": {
           "tag": "div",
           "class": "question_title",
           "inner": "%title%"
+        },
+
+        "form": {
+          "class": "form-horizontal",
+          "inner": {
+            "class": "form-group",
+            "inner":
+              [
+                {
+                  "tag": "label",
+                  "class": "control-label col-sm-1",
+                  "for": "%for%",
+                  "inner": "%inner%"
+                },
+                {
+                  "class": "col-sm-11",
+                  "inner": {
+                    "tag": "input",
+                    "type": "%type%",
+                    "class": "form-control",
+                    "id":"%id%",
+                    "placeholder": "%value%"
+                  }
+                }
+              ]
+          }
+
+
         }
+
       },
 
       data: {
@@ -45,7 +109,7 @@
         key: "demo"
       },
       style: [ 'ccm.load', '../realTimeForum/style.css' ],
-      editor: [ 'ccm.instance', 'https://tkless.github.io/ccm-components/editor/editor.js' ],
+      editor: [ 'ccm.component', 'https://tkless.github.io/ccm-components/editor/ccm.editor.js' ],
       bootstrap: [ 'ccm.load', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' ]
     },
 
@@ -58,10 +122,37 @@
 
           self.ccm.helper.setContent(self.element, self.ccm.helper.protect( self.ccm.helper.html( self.templates.main ) ));
 
-          for ( var i = 0; i < dataset.questions.length; i++ ) {
-            self.element.querySelector( "#question-summery" ).appendChild( self.ccm.helper.html( self.templates.question, {
-              title: dataset.questions[i].title
-            } ) );
+          renderQuestions();
+          renderEditor();
+
+          function renderQuestions() {
+            for ( var i = 0; i < dataset.questions.length; i++ ) {
+              self.element.querySelector( "#question-summery" ).appendChild( self.ccm.helper.html( self.templates.question, {
+                title: dataset.questions[i].title
+              } ) );
+            }
+          }
+
+          function renderEditor() {
+            self.element.querySelector( '#new-question-title' ).appendChild( self.ccm.helper.html( self.templates.form, {
+              for: "title",
+              inner: "Title",
+              id: "title",
+              type: "text",
+              value: "What is your Question ?"
+            } ));
+
+            self.element.querySelector( '#form' ).appendChild( self.ccm.helper.html( self.templates.form, {
+              for: "question",
+              inner: '',
+              id: "question",
+              type: "hidden",
+              value: ''
+            } ));
+
+            self.editor.start( { element: self.element.querySelector( "#editor" ) } );
+
+
           }
 
           if ( callback ) callback();

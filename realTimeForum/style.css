@@ -1,3 +1,21 @@
-.main {
-    display: flex;
+.container {
+    font-family:sans-serif;
+    -webkit-text-size-adjust:100%;
+    -ms-text-size-adjust:100%
+}
+hr {
+    margin-top: 40px !important;
+    margin-bottom: 40px !important;
+}
+
+form {
+    margin-top: 15px;
+}
+
+.btn {
+    margin-left: 15px;
+}
+
+#editor-container {
+    height: 130px;
 }
