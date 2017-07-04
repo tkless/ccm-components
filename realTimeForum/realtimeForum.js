@@ -20,25 +20,14 @@
           "inner":
             [
               {
-                "id": "questions-list",
-                "inner": [
-                  {
-                    "tag": "div",
-                    "id": "question-overview"
-                  },
-                  {
-                    "tag": "div",
-                    "id": "question-summery",
-                    "class": "bg-info"
-                  },
-                  {
-                    "tag": "hr"
-                  }
-                ]
+                "id": "questions-list"
               },
-
+              {
+                "tag": "hr"
+              },
               {
                 "tag": "form",
+                "onsubmit": "%submit%",
                 "inner": [
                   {
                     "id": "new-question-title"
@@ -69,9 +58,29 @@
         },
 
         "question": {
-          "tag": "div",
-          "class": "question_title",
-          "inner": "%title%"
+          "class": "question",
+          "inner": [
+            {
+              "class": "question-overview",
+              "inner": [
+                {
+                  "class": "vote-sum",
+                  "inner": "%votes% votes"
+                },
+                {
+                  "class": "answer_sum",
+                  "inner": "%answers% answers"
+                }
+              ]
+            },
+            {
+              "class": "question-summery bg-info",
+              "inner": {
+                "class": "question_title",
+                "inner": "%title%"
+              }
+            }
+          ]
         },
 
         "form": {
@@ -108,6 +117,7 @@
         store: [ 'ccm.store', '../realTimeForum/datastore.json' ],
         key: "demo"
       },
+      user:  [ 'ccm.instance', 'https://akless.github.io/ccm-components/user/ccm.user.min.js' ],
       style: [ 'ccm.load', '../realTimeForum/style.css' ],
       editor: [ 'ccm.component', 'https://tkless.github.io/ccm-components/editor/ccm.editor.js' ],
       bootstrap: [ 'ccm.load', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' ]
@@ -118,41 +128,58 @@
 
       this.start = function (callback) {
 
-        self.ccm.helper.dataset(self.data.store, self.data.key, function (dataset) {
+        self.ccm.helper.dataset(self.data.store, self.data.key, function ( dataset ) {
 
-          self.ccm.helper.setContent(self.element, self.ccm.helper.protect( self.ccm.helper.html( self.templates.main ) ));
+          self.ccm.helper.setContent( self.element, self.ccm.helper.protect( self.ccm.helper.html( self.templates.main ), {
+            submit: function() {
+              alert( "jaa" );
+              newPost(); }
+          } ));
 
           renderQuestions();
           renderEditor();
 
           function renderQuestions() {
             for ( var i = 0; i < dataset.questions.length; i++ ) {
-              self.element.querySelector( "#question-summery" ).appendChild( self.ccm.helper.html( self.templates.question, {
-                title: dataset.questions[i].title
+              self.element.querySelector( '#questions-list' ).appendChild( self.ccm.helper.html( self.templates.question, {
+                title: dataset.questions[i].title,
+                votes: i,
+                answers: dataset.questions[i].answers.length
               } ) );
             }
           }
 
           function renderEditor() {
             self.element.querySelector( '#new-question-title' ).appendChild( self.ccm.helper.html( self.templates.form, {
-              for: "title",
+              for:   "title",
               inner: "Title",
-              id: "title",
-              type: "text",
+              id:    "title",
+              type:  "text",
               value: "What is your Question ?"
             } ));
 
             self.element.querySelector( '#form' ).appendChild( self.ccm.helper.html( self.templates.form, {
-              for: "question",
-              inner: '',
-              id: "question",
-              type: "hidden",
-              value: ''
+              for:   "question",
+              inner: "",
+              id:    "question",
+              type:  "hidden",
+              value: ""
             } ));
 
-            self.editor.start( { element: self.element.querySelector( "#editor" ) } );
+            self.editor.start( { element: self.element.querySelector( '#editor' ) } );
+          }
 
+          function newPost() {
+            if ( !self.user ) return;
 
+            if ( !self.user.isLoggedIn() ) {
+
+              self.user.login ( function () {
+                var question_title = self.element.querySelector( 'input[id = title ]' ).value;
+
+                console.log( 'huhu', question_title );
+              } );
+            }
           }
 
           if ( callback ) callback();

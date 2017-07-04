@@ -4,8 +4,7 @@
     -ms-text-size-adjust:100%
 }
 hr {
-    margin-top: 40px !important;
-    margin-bottom: 40px !important;
+    margin: 40px 40px 40px 40px !important;
 }
 
 form {
@@ -18,4 +17,12 @@ form {
 
 #editor-container {
     height: 130px;
+}
+
+.question, .question-overview {
+    display: flex;
+}
+
+.question-summery {
+    width: 100%;
 }
