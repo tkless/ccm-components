@@ -1,86 +1,10 @@
 {
   "demo":
   {
-    "key": "demo-0",
-    "questions":
-    [
-      {
-        "date": "11.07.2015 - 10:30",
-        "user": "tmeskh2s",
-        "title": "Lorem ipsum",
-        "content": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor?",
-        "rating": 2,
-        "voted_users": {
-          "akless2m": true,
-          "arieke2m": true,
-          "tbonne2m": true,
-          "mkaul2m": false
-        },
-        "answers":
-        [
-          {
-            "date": "11.07.2015 - 12:30",
-            "user": "akless2m",
-            "content": "Li Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular. Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules. Omnicos directe al desirabilite de un nov lingua franca: On refusa continuar payar custosi traductores.",
-            "rating": 1,
-            "voted_users": {
-              "arieke2m": true
-            },
-            "bounty": true
-          },
-
-          {
-            "date": "11.07.2015 - 16:34",
-            "user": "arieke2m",
-            "content": "Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus",
-            "rating": 2,
-            "voted_users": {
-              "tbonne2m": true,
-              "mkaul2m": true
-            },
-            "bounty": false
-          },
-
-          {
-            "date": "12.07.2015 - 10:00",
-            "user": "tbonne2m",
-            "content": "Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Desirabilite de un nov lingua franca: On refusa continuar payar custosi traductores.",
-            "rating": 4,
-            "voted_users": {
-              "akless2m": true,
-              "arieke2m": true,
-              "tbonne2m": true,
-              "mkaul2m": true
-            },
-            "bounty": false
-          }
-        ]
-      },
-
-      {
-        "date": "17.07.2015 - 07:30",
-        "user": "tmeskh2s",
-        "title": "Omnicos directe",
-        "content": "Omnicos directe al desirabilite de un nov lingua franca: On refusa continuar payar custosi traductores. At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles?",
-        "rating": 1,
-        "voted_users": {
-          "akless2m": true
-        },
-        "answers":
-        [
-          {
-            "date": "18.07.2015 - 10:30",
-            "user": "mkaul2m",
-            "content": "Li Europan lingues.",
-            "rating": 2,
-            "voted_users": {
-              "akless2m": true,
-              "arieke2m": true
-            },
-            "bounty": false
-          }
-        ]
-      }
+    "key": "demo",
+    "questions": [
+      [ "ccm.get", "../question/datastore.json", "1" ],
+      [ "ccm.get", "../question/datastore.json", "2" ]
     ]
   }
 }

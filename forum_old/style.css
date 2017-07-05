@@ -1,0 +1,300 @@
+.ccm-forum {
+    width: 100%;
+    clear:both;
+    line-height: normal;
+}
+
+.ccm-forum,
+.ccm-forum input,
+.ccm-forum button {
+    font-family: Verdana, Arial, sans-serif
+}
+
+.ccm-forum div hr {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+    margin: 2%;
+}
+
+.ccm-forum button:hover {
+    background: none repeat scroll 0 0 #556740;
+}
+
+.ccm-forum button {
+    background: none repeat scroll 0 0 #85a366;
+    border: 1px solid #556740;
+    border-radius: 3px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.3) inset, 0 1px 1px rgba(100, 100, 100, 0.3);
+    color: white;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0.6em 0.8em;
+    text-align: center;
+    transition: background 0.15s ease 0s, color 0.15s ease 0s;
+}
+
+/*---------------------------------------------------- navigation ----------------------------------------------------*/
+
+.ccm-forum .qa_user,
+.ccm-forum .qa_langmenu {
+    float: left;
+    margin: 0.5%;
+}
+
+.ccm-forum .qa_navigation {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    margin: 2%;
+}
+
+/*-------------------------------------------------- questions view --------------------------------------------------*/
+
+.ccm-forum .qa_questions_view {
+    margin: 2%;
+}
+
+.ccm-forum .qa_questions_view_entry {
+    display: flex;
+}
+
+.ccm-forum .qa_questions_view_entry {
+    margin-top: 2%;
+}
+
+.ccm-forum .qa_questions_view_left {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    font-size: 60%;
+    font-weight: bold;
+    font-family: "Courier New", Courier, monospace;
+}
+
+.ccm-forum .qa_questions_view_right {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: justify;
+    cursor: pointer;
+    padding-left: 2%;
+}
+
+.ccm-forum .qa_questions_view_answers {
+    background-color: rgba(155, 189, 120, 0.52);
+    border: 1px solid #85a366;
+}
+
+.ccm-forum .qa_questions_view_title {
+    font-size: 120%;
+    color: #758d57;
+}
+
+.ccm-forum .qa_questions_view_content {
+    width: 90%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/*--------------------------------------------------- answers view ---------------------------------------------------*/
+
+.ccm-forum .qa_answers_view {
+    display: flex;
+    flex-direction: column;
+    margin: 2%;
+}
+
+/*------------ question entry ------------*/
+
+.ccm-forum .qa_answers_view_question_entry {
+    display: flex;
+    flex-direction: column;
+}
+.ccm-forum .qa_answers_view_question_entry_content {
+    display: flex;
+}
+
+.ccm-forum .qa_answers_view_question {
+    display: flex;
+    flex-direction: column;
+    padding-left: 1.5%;
+}
+
+.ccm-forum .qa_answers_view_question_title {
+    border-bottom: 1px solid #85a366;
+    color: #758d57;
+    font-size: 110%;
+    font-weight: bold;
+}
+
+/*------------ answer entries ------------*/
+
+.ccm-forum .qa_answers_view_answer_entry {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2%;
+}
+
+.ccm-forum .qa_answers_view_answer_entry_content {
+    display: flex;
+    align-items: baseline;
+}
+
+.ccm-forum .qa_answers_view_answer {
+    display: flex;
+    flex-direction: column;
+    padding-left: 2%;
+    text-align: justify;
+    width: 90%;
+    justify-content: center;
+
+}
+
+.ccm-forum .qa_answers_view_answer_content {
+    word-wrap: break-word;
+}
+
+/*------------ voting ------------*/
+
+.ccm-forum .qa_voting {
+    display: flex;
+    flex-direction: column;
+    font-family: "Courier New", Courier, monospace;
+    font-size: medium;
+    font-weight: bold;
+    text-align: center;
+}
+
+.ccm-forum .qa_vote_up,
+.ccm-forum .qa_vote_down {
+    border-bottom: 14px solid #85a366;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    cursor: pointer;
+}
+
+.ccm-forum .qa_vote_down {
+    transform: rotate(180deg);
+}
+
+.ccm-forum .qa_vote_hidden {
+    border-bottom-color: transparent;
+    cursor: default;
+}
+
+.ccm-forum .qa_check_mark {
+    color: #85a366;
+    font-size: 30pt;
+    opacity: 0.33;
+    cursor: pointer;
+}
+
+.ccm-forum .qa_check_mark_selected,
+.ccm-forum .qa_check_mark:hover {
+    opacity: 1;
+}
+
+/*----------------------------------------- both: questions and answers view -----------------------------------------*/
+
+/*---------- signature ----------*/
+
+.ccm-forum .qa_signature {
+    display: flex;
+    color: #a6a6a6;
+    font-size: 70%;
+    font-family: "Courier New", Courier, monospace;
+}
+
+/*---------- website area for creating a new question or answer ----------*/
+
+.ccm-forum .qa_new {
+    display: flex;
+    flex-direction: column;
+}
+
+.ccm-forum .qa_new > div button,
+.ccm-forum .qa_new_question {
+    display: flex;
+    align-items: center;
+    margin: 2%;
+}
+
+.ccm-forum .qa_new_question {
+    display: flex;
+    justify-items: baseline;
+    font-size: large;
+}
+
+.ccm-forum .qa_new_question_title {
+    width: 30%;
+}
+
+.ccm-forum .qa_new_question_title > * > input {
+    border: 1px solid lightgrey;
+    border-radius: 2px;
+    padding: 1em;
+    width: 100%;
+}
+
+/*---------- text editor ----------*/
+
+.ccm-forum .jqte {
+    margin: 30px 2% 0;
+    border: 1px solid #626c6e;
+    border-radius: 5px;
+    overflow: hidden;
+    transition: border 0.4s;
+    box-shadow: 0 0 3px black;
+}
+
+.ccm-forum .jqte_focused {
+    border-color: #626c6e;
+    box-shadow: 0 0 10px #000000;
+}
+
+/* toolbar */
+.ccm-forum .jqte_toolbar {
+    padding: 7px 10px;
+    background: rgba(169, 194, 145, 0.56);
+}
+.ccm-forum .jqte_focused .jqte_toolbar {
+    background: #8aa37a;
+    border-bottom: #626c6e 1px solid;
+    box-shadow: inset 0 10px 20px #8aa37a;
+}
+
+.ccm-forum .jqte_tool {
+    margin: 0 0.2em 0 0;
+    padding: 0.4em;
+    cursor: pointer;
+}
+
+.ccm-forum .jqte_tool,
+.ccm-forum .jqte_tool_label,
+.ccm-forum .jqte_tool_icon,
+.ccm-forum .jqte_tool:hover {
+    border: 1px solid transparent !important;
+}
+
+.ccm-forum .jqte_tool, .jqte_tool_icon, .jqte_tool_label {
+    border-radius: 3px;
+}
+
+.ccm-forum .jqte_tool_icon {
+    display: block;
+    width: 22px;
+    height: 22px;
+}
+
+.ccm-forum .jqte_tool .jqte_tool_1 .jqte_tool_label {
+    position:relative;
+    display:block;
+    padding:3px;
+    width:70px;
+    height:16px;
+    overflow:hidden;
+    text-decoration:none !important
+}

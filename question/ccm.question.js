@@ -6,10 +6,10 @@
 
 ( function () {
 
-  var ccm_version = '8.0.0';
+  var ccm_version = '9.0.0';
   var ccm_url     = '../libs/ccm.js';
 
-  var component_name = 'realtime_forum';
+  var component_name = 'question';
   var component_obj  = {
     name: component_name,
 
@@ -62,34 +62,6 @@
             {
               "id": "answers_view",
               "class": "container"
-            }
-          ]
-        },
-
-        "answers_view": {
-          "class": "answer",
-          "inner": [
-            {
-              "class": "answer-overview",
-              "inner": [
-                {
-                  "class": "voting-area",
-                  "inner": [
-                    {
-                      "class": "vote",
-                      "inner": "%vote%"
-                    },
-                    {
-                      "class": "accepted glyphicon glyphicon-ok",
-                      "onClick": "%accepted%"
-                    }
-                  ]
-                },
-                {
-                  "class": "answer-summery",
-                  "inner": "%answer%"
-                }
-              ]
             }
           ]
         },
@@ -179,11 +151,11 @@
       },
 
       data: {
-        store: [ 'ccm.store', '../realTimeForum/datastore.json' ],
+        store: [ 'ccm.store', '../question/datastore.json' ],
         key: "demo"
       },
-      //user:  [ 'ccm.instance', 'https://akless.github.io/ccm-components/user/ccm.user.min.js' ],
-      style: [ 'ccm.load', '../realTimeForum/style.css' ],
+      user:  [ 'ccm.instance', 'https://akless.github.io/ccm-components/user/ccm.user.min.js' ],
+      style: [ 'ccm.load', '../question/style.css' ],
       editor: [ 'ccm.component', 'https://tkless.github.io/ccm-components/editor/ccm.editor.js',
         { 'settings.modules.toolbar': [
             [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
@@ -209,7 +181,6 @@
       var editor;
 
       this.start = function (callback) {
-        console.log("jaa");
 
         self.ccm.helper.dataset(self.data.store, self.data.key, function ( dataset ) {
 

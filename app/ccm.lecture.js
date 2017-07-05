@@ -49,9 +49,9 @@ ccm.component( {
       store:        [ ccm.store,     '../demoData/we_inputs.json' ]
     } ],
 
-    forum:          [ ccm.component, '../forum/ccm.forum.js', {
-      style:        [ ccm.load,      '../forum/style.css' ],
-      store:        [ ccm.store,     '../forum/forum.json'],
+    forum:          [ ccm.component, '../forum_old/ccm.forum.js', {
+      style:        [ ccm.load,      '../forum_old/style.css' ],
+      store:        [ ccm.store,     '../forum_old/forum_old.json'],
       lang:         null,
       user:         null
     } ],
