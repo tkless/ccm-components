@@ -12,11 +12,8 @@ form {
 }
 
 .btn {
+    margin-top: 15px;
     margin-left: 15px;
-}
-
-#editor-container {
-    height: 130px;
 }
 
 .question, .question-overview {

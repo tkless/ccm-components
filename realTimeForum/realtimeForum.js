@@ -15,46 +15,60 @@
 
     config: {
       templates: {
-        "main":  {
-          "class": "container",
-          "inner":
-            [
-              {
-                "id": "questions-list"
-              },
-              {
-                "tag": "hr"
-              },
-              {
-                "tag": "form",
-                "onsubmit": "%submit%",
-                "inner": [
+        "main": {
+          "inner": [
+            {
+              "id": "questions_view",
+              "class": "container",
+              "inner":
+                [
                   {
-                    "id": "new-question-title"
+                    "id": "questions-list"
                   },
                   {
-                    "id": "editor-container",
+                    "tag": "hr"
+                  },
+                  {
+                    "tag": "form",
+                    "onsubmit": "%submit%",
                     "inner": [
                       {
-                        "id": "form"
+                        "id": "new-question-title"
                       },
                       {
-                        "id": "editor"
+                        "id": "editor-container",
+                        "inner": [
+                          {
+                            "id": "form"
+                          },
+                          {
+                            "id": "editor"
+                          }
+                        ]
+                      },
+                      {
+                        "class": "button row",
+                        "inner": {
+                          "tag": "button",
+                          "class": "btn btn-primary",
+                          "type": "submit",
+                          "inner": "Post Question"
+                        }
                       }
                     ]
-                  },
-                  {
-                    "class": "button row",
-                    "inner": {
-                      "tag": "button",
-                      "class": "btn btn-primary",
-                      "type": "submit",
-                      "inner": "Post Question"
-                    }
                   }
                 ]
-              }
-            ]
+            },
+            {
+              "id": "answers_view",
+              "class": "container"
+            }
+          ]
+        },
+
+        "answers_view": {
+
+
         },
 
         "question": {
@@ -107,8 +121,6 @@
                 }
               ]
           }
-
-
         }
 
       },
@@ -119,22 +131,37 @@
       },
       user:  [ 'ccm.instance', 'https://akless.github.io/ccm-components/user/ccm.user.min.js' ],
       style: [ 'ccm.load', '../realTimeForum/style.css' ],
-      editor: [ 'ccm.component', 'https://tkless.github.io/ccm-components/editor/ccm.editor.js' ],
-      bootstrap: [ 'ccm.load', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' ]
+      editor: [ 'ccm.component', 'https://tkless.github.io/ccm-components/editor/ccm.editor.js',
+        { 'settings.modules.toolbar': [
+            [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+            ['bold', 'italic', 'underline'],        // toggled buttons
+            ['blockquote', 'code-block'],
+
+            [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+            [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+
+            [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+            [{ 'align': [] }]
+        ] }
+      ],
+      voting: [ "ccm.component", "https://tkless.github.io/ccm-components/voting/ccm.voting.js", { data:
+        { store: 'https://tkless.github.io/ccm-components/voting/voting_datastore.js' } } ],
+      bootstrap: [ 'ccm.load', 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css' ]
     },
 
     Instance: function () {
       var self = this;
+      var editor;
 
       this.start = function (callback) {
 
         self.ccm.helper.dataset(self.data.store, self.data.key, function ( dataset ) {
 
-          self.ccm.helper.setContent( self.element, self.ccm.helper.protect( self.ccm.helper.html( self.templates.main ), {
-            submit: function() {
-              alert( "jaa" );
-              newPost(); }
-          } ));
+          self.ccm.helper.setContent( self.element, self.ccm.helper.protect( self.ccm.helper.html( self.templates.main, {
+            submit: function ( event ) { event.preventDefault(); newPost(); }
+          } ) ) );
 
           renderQuestions();
           renderEditor();
@@ -146,6 +173,8 @@
                 votes: i,
                 answers: dataset.questions[i].answers.length
               } ) );
+
+              self.voting.instance( { data: dataset.questions[ i ] } );
             }
           }
 
@@ -166,20 +195,20 @@
               value: ""
             } ));
 
-            self.editor.start( { element: self.element.querySelector( '#editor' ) } );
+            self.editor.start( { element: self.element.querySelector( '#editor' ) }, function ( instance ) {
+              editor = instance;
+            } );
           }
 
           function newPost() {
             if ( !self.user ) return;
 
-            if ( !self.user.isLoggedIn() ) {
+            self.user.login ( function () {
+              console.log( editor.get() );
+              var question_title = self.element.querySelector( 'input[id = title ]' ).value;
 
-              self.user.login ( function () {
-                var question_title = self.element.querySelector( 'input[id = title ]' ).value;
-
-                console.log( 'huhu', question_title );
-              } );
-            }
+              console.log( editor.get().getContents() );
+            } );
           }
 
           if ( callback ) callback();
