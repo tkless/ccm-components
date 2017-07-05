@@ -16,10 +16,7 @@ form {
     margin-left: 15px;
 }
 
-.question, .question-overview {
-    display: flex;
-}
-
-.question-summery {
-    width: 100%;
-}
+/*.question:not(:last-child) {
+    border-bottom: 1px solid rgba(0,0,0,.1);
+    margin-bottom: 15px;
+}*/

@@ -9,7 +9,7 @@
   var ccm_version = '8.0.0';
   var ccm_url     = '../libs/ccm.js';
 
-  var component_name = 'realTimeForum';
+  var component_name = 'realtime_forum';
   var component_obj  = {
     name: component_name,
 
@@ -67,31 +67,84 @@
         },
 
         "answers_view": {
-
-
+          "class": "answer",
+          "inner": [
+            {
+              "class": "answer-overview",
+              "inner": [
+                {
+                  "class": "voting-area",
+                  "inner": [
+                    {
+                      "class": "vote",
+                      "inner": "%vote%"
+                    },
+                    {
+                      "class": "accepted glyphicon glyphicon-ok",
+                      "onClick": "%accepted%"
+                    }
+                  ]
+                },
+                {
+                  "class": "answer-summery",
+                  "inner": "%answer%"
+                }
+              ]
+            }
+          ]
         },
 
         "question": {
-          "class": "question",
+          "class": "question row",
           "inner": [
             {
-              "class": "question-overview",
-              "inner": [
-                {
-                  "class": "vote-sum",
-                  "inner": "%votes% votes"
-                },
-                {
-                  "class": "answer_sum",
-                  "inner": "%answers% answers"
-                }
-              ]
+              "class": "question-overview col-md-2 text-center",
+              "inner":
+                [
+                  {
+                    "class": "row",
+                    "inner": [
+                      {
+                        "class": "vote-sum col-md-6 col-xs-6",
+                        "inner": "%votes%"
+                      },
+                      {
+                        "class": "answer_sum col-md-6 col-xs-6",
+                        "inner": "%answers%"
+                      }
+                    ]
+                  },
+                  {
+                    "class": "row",
+                    "inner": [
+                      {
+                        "class": "vote-label col-md-6 col-xs-6",
+                        "inner": "votes"
+                      },
+                      {
+                        "class": "vote-label col-md-6 col-xs-6",
+                        "inner": "answers"
+                      }
+                    ]
+                  }
+                ]
             },
             {
-              "class": "question-summery bg-info",
+              "class": "question-summery col-md-10",
               "inner": {
-                "class": "question_title",
-                "inner": "%title%"
+                "tag": "blockquote",
+                "inner":[
+                  {
+                    "tag": "p",
+                    "class": "question_title",
+                    "inner": "%title%"
+                  },
+                  {
+                    "tag": "footer",
+                    "class": "question_footer",
+                    "inner": "%signatur%"
+                  }
+                ]
               }
             }
           ]
@@ -129,7 +182,7 @@
         store: [ 'ccm.store', '../realTimeForum/datastore.json' ],
         key: "demo"
       },
-      user:  [ 'ccm.instance', 'https://akless.github.io/ccm-components/user/ccm.user.min.js' ],
+      //user:  [ 'ccm.instance', 'https://akless.github.io/ccm-components/user/ccm.user.min.js' ],
       style: [ 'ccm.load', '../realTimeForum/style.css' ],
       editor: [ 'ccm.component', 'https://tkless.github.io/ccm-components/editor/ccm.editor.js',
         { 'settings.modules.toolbar': [
@@ -148,7 +201,7 @@
       ],
       voting: [ "ccm.component", "https://tkless.github.io/ccm-components/voting/ccm.voting.js", { data:
         { store: 'https://tkless.github.io/ccm-components/voting/voting_datastore.js' } } ],
-      bootstrap: [ 'ccm.load', 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css' ]
+      bootstrap: [ 'ccm.load', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css' ]
     },
 
     Instance: function () {
@@ -156,6 +209,7 @@
       var editor;
 
       this.start = function (callback) {
+        console.log("jaa");
 
         self.ccm.helper.dataset(self.data.store, self.data.key, function ( dataset ) {
 
@@ -167,14 +221,31 @@
           renderEditor();
 
           function renderQuestions() {
+
+            var voting;
             for ( var i = 0; i < dataset.questions.length; i++ ) {
+              voting = self.voting.instance( { data: dataset.questions[ i ] } );
               self.element.querySelector( '#questions-list' ).appendChild( self.ccm.helper.html( self.templates.question, {
                 title: dataset.questions[i].title,
                 votes: i,
                 answers: dataset.questions[i].answers.length
               } ) );
 
-              self.voting.instance( { data: dataset.questions[ i ] } );
+              renderAnswers( i, voting );
+            }
+          }
+          
+          function renderAnswers( question, voting ) {
+
+            for ( var i = 0; i < dataset.questions[ question ].answers.length; i++ ) {
+              self.element.querySelector( '#answers-view' ).appendChild( self.ccm.helper.html( self.templates.answers_view, {
+                vote:     function () { voting.start(); },
+                answer:   dataset.questions[ question ].answers[i],
+                accepted: function () {
+                  alert( "your answer is acceted :)");
+                }
+
+              } ));
             }
           }
 
