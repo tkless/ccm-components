@@ -66,34 +66,6 @@
           ]
         },
 
-        "answers_view": {
-          "class": "answer",
-          "inner": [
-            {
-              "class": "answer-overview",
-              "inner": [
-                {
-                  "class": "voting-area",
-                  "inner": [
-                    {
-                      "class": "vote",
-                      "inner": "%vote%"
-                    },
-                    {
-                      "class": "accepted glyphicon glyphicon-ok",
-                      "onClick": "%accepted%"
-                    }
-                  ]
-                },
-                {
-                  "class": "answer-summery",
-                  "inner": "%answer%"
-                }
-              ]
-            }
-          ]
-        },
-
         "question": {
           "class": "question row",
           "inner": [
@@ -209,7 +181,6 @@
       var editor;
 
       this.start = function (callback) {
-        console.log("jaa");
 
         self.ccm.helper.dataset(self.data.store, self.data.key, function ( dataset ) {
 
@@ -224,7 +195,8 @@
 
             var voting;
             for ( var i = 0; i < dataset.questions.length; i++ ) {
-              voting = self.voting.instance( { data: dataset.questions[ i ] } );
+              //voting = self.voting.instance( { data: dataset.questions[ i ] } );
+              console.log(self.voting);
               self.element.querySelector( '#questions-list' ).appendChild( self.ccm.helper.html( self.templates.question, {
                 title: dataset.questions[i].title,
                 votes: i,
@@ -255,7 +227,7 @@
             } );
           }
 
-          function newPost() {
+          function newQuestion() {
             if ( !self.user ) return;
 
             self.user.login ( function () {

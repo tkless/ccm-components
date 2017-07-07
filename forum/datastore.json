@@ -3,8 +3,11 @@
   {
     "key": "demo",
     "questions": [
-      [ "ccm.get", "../question/datastore.json", "1" ],
-      [ "ccm.get", "../question/datastore.json", "2" ]
+      [ "ccm.instance", "https://tkless.github.io/ccm-components/question/ccm.question.js", ["ccm.get", "../question/configs.json", "1"  ]],
+
+
+
+      [ "ccm.instance", "../question/datastore.json", "2" ]
     ]
   }
 }
