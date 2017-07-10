@@ -74,10 +74,6 @@
                 },
 
                 {
-                  "tag": "hr"
-                },
-
-                {
                   "id": "new-answer",
                   "inner": [
                     {
@@ -107,37 +103,59 @@
         },
 
         "answer": {
-          "class": "answer row",
           "inner": [
             {
-             "class": "voting-area col-md-1",
+              "class": "answer row",
               "inner": [
                 {
-                  "class": "voting-overview col-md-12"
+                  "class": "voting-area col-md-1 col-sx-12",
+                  "inner": [
+                    {
+                      "class": "voting-overview col-sx-6 col-md-12"
+                    },
+                    {
+                      "class": "answer-accepted col-sx-6 col-md-12",
+                      "inner": {
+                        "tag": "span",
+                        "class": "glyphicon glyphicon-ok",
+                        "oncklick": "%accepted%"
+                      }
+                    }
+                  ]
                 },
                 {
-                  "class": "answer-accepted col-md-12",
-                  "inner": {
-                    "tag": "span",
-                    "class": "glyphicon glyphicon-ok",
-                    "oncklick": "%accepted%"
-                  }
-                }
+                  "class": "answer-overview col-md-11 col-sx-12",
+                  "inner": [
+                    "%answer%",
+                    {
+                      "tag": "blockquote",
+                      "class": "blockquote-reverse",
+                      "inner": {
+                        "tag": "footer",
+                        "inner": "%signatur%"
+                      }
+                    }
+                  ]
+                },
               ]
             },
             {
-              "class": "answer-overview col-md-11",
-              "inner": [
-                "%answer%",
-                {
-                  "tag": "blockquote",
-                  "class": "blockquote-reverse",
-                  "inner": {
-                    "tag": "footer",
-                    "inner": "%signatur%"
-                  }
-                }
-              ]
+              "tag": "hr"
+            }
+          ]
+
+        },
+
+        "voting_overview": {
+          "class": "voting_overview row",
+          "inner": [
+            {
+              "class": "col-md-12",
+              "inner": "%get_voting%"
+            },
+            {
+              "class": "col-md-12",
+              "inner": "votes"
             }
           ]
         }
@@ -147,7 +165,7 @@
         store: [ 'ccm.store', '../question/datastore.json' ],
         key: "1"
       },
-      user:  [ 'ccm.instance', 'https://akless.github.io/ccm-components/user/ccm.user.min.js' ],
+      user:  [ 'ccm.instance', 'https://akless.github.io/ccm-components/user/ccm.user.min.js', { logged_in: true, 'guest.user': 'tmeskh2s' } ],
       style: [ 'ccm.load', '../question/style.css' ],
       editor: [ 'ccm.component', 'https://tkless.github.io/ccm-components/editor/ccm.editor.js',
         { 'settings.modules.toolbar': [
@@ -190,8 +208,17 @@
 
       this.start = function ( callback ) {
 
-        self.ccm.helper.dataset( self.data.store, self.data.key, function ( datasetx ) {
-          dataset = datasetx;
+        self.ccm.helper.dataset( self.data.store, self.data.key, function ( question ) {
+          dataset = question;
+        } );
+
+
+        renderQuestion();
+        renderAnswers();
+        renderEditor();
+
+        function renderQuestion() {
+
           self.ccm.helper.setContent( self.element, self.ccm.helper.protect( self.ccm.helper.html( self.templates.main, {
             title: dataset.title,
             signatur: "posted " + dataset.date,
@@ -199,53 +226,60 @@
             new_answer: function () { newAnswer(); }
           })));
 
-          renderVoting( self.element.querySelector( '.voting' ), dataset.voting );
-          renderAnswers();
-          renderEditor();
+          if ( !self.user || !self.user.isLoggedIn() )
+            return;
 
+          var user = self.user.data().user;
 
-          function renderAnswers() {
-            self.element.querySelector( '#answers').innerHTML = '';
+          if ( user === dataset.user ) {
+            self.voting.instance( dataset.voting, function (instance) {
+              var voting_elem = self.ccm.helper.html( self.templates.voting_overview, {
+                get_voting: instance.getVoting()
+              } );
 
-            for ( var i = 0; i < dataset.answers.length; i++ ) {
-              renderAnswer( dataset.answers[ i ] );
-            }
-
-            function answerAccepted( answer ) {
-
-              if ( self.user.data().user === dataset.user ) return;
-
-              // has user already accepted ?
-              if ( answer.accepted === true )
-                answer.accepted = '';
-              // not accepted
-              else {
-                self.element.querySelector( '.glyphicon-ok' ).classList.add( 'accepted' );
-                answer.accepted = true;
-              }
-
-              // update dataset for rendering => (re)render accepted answer
-              self.data.store.set( dataset, function () { renderAnswers() } );
-            }
-
+              self.element.querySelector( '.voting' ).appendChild( voting_elem );
+            } );
           }
+          else
+            renderVoting( self.element.querySelector( '.voting' ), dataset.voting );
 
-        } );
+        }
 
-        function renderVoting( element, voting ) {
-          voting.element = element;
+        function renderAnswers() {
+          self.element.querySelector( '#answers').innerHTML = '';
 
-          self.voting.start( voting );
+          dataset.answers.map ( renderAnswer );
+
+          function answerAccepted( answer ) {
+
+            if ( self.user.data().user === dataset.user ) return;
+
+            // has user already accepted ?
+            if ( answer.accepted === true )
+              answer.accepted = '';
+            // not accepted
+            else {
+              self.element.querySelector( '.glyphicon-ok' ).classList.add( 'accepted' );
+              answer.accepted = true;
+            }
+
+            // update dataset for rendering => (re)render accepted answer
+            self.data.store.set( dataset, function () { renderAnswers() } );
+          }
         }
 
         function renderAnswer( answer ) {
+
+          // generate on-the-fly element
           var answer_elem = self.ccm.helper.html( self.templates.answer, {
             answer: answer.content,
             signatur: answer.date,
             accepted: function () { answerAccepted( answer ); }
           } );
 
-          self.element.querySelector( '#answers' ).appendChild( answer_elem );
+          // append element to DOM
+          self.ccm.helper.prepend( self.element.querySelector( '#answers' ), answer_elem );
+          //self.element.querySelector( '#answers' ).appendChild( answer_elem );
 
           // render accepted answer green
           if ( answer.accepted === true )
@@ -255,19 +289,50 @@
         }
 
         function renderEditor() {
-          self.editor.start( { element: self.element.querySelector( '#editor' ) }, function ( instance ) {
-            editor = instance;
-          } );
+          if (!self.user || !self.user.isLoggedIn()) return;
+
+          var user = self.user.data().user;
+
+            self.editor.start({element: self.element.querySelector('#editor')}, function (instance) {
+              if (user !== dataset.user) {
+                editor = instance;
+              }
+              else {
+                editor = instance;
+                editor.get().enable( false );
+              }
+            });
         }
-        
+
+        function renderVoting( element, voting ) {
+          if ( !self.user ) return;
+
+          voting = self.ccm.helper.clone( voting );
+          voting.element = element;
+          self.voting.start( voting );
+        }
+
+        //ToDO
         function newAnswer() {
 
           self.user.login( function () {
             var user = self.user.data().user;
 
-              // only not question author can be able to create new answer
-              if ( user !== dataset.user ) {
-              }
+            // only not question author can be able to create new answer
+            if ( user !== dataset.user ) {
+              dataset.answers.push(
+                {
+                  "date": getDateTime(),
+                  "user": user,
+                  "content": editor.get().root.innerHTML,
+                  "voting": { }
+                }
+
+              );
+
+              // update dataset for rendering => (re)render accepted answer
+              self.data.store.set( dataset, function () { renderAnswers(); } );
+            }
 
           } );
         }

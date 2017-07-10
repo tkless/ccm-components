@@ -10,6 +10,15 @@ hr {
 form {
     margin-top: 15px;
 }
+.voting-area,
+.voting_overview {
+    text-align: center;
+}
+
+.voting_overview,
+.answer-accepted {
+    font-size: 1.5em;
+}
 
 .btn {
     margin-top: 15px;
