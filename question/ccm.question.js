@@ -164,7 +164,7 @@
             [{ 'align': [] }]
         ] }
       ],
-      voting: [ "ccm.component", "https://akless.github.io/ccm-components/voting/ccm.voting.js", {
+      voting: [ "ccm.component", "https://tkless.github.io/ccm-components/voting/ccm.voting.js", {
         data: {
           store: [ 'ccm.store', 'https://tkless.github.io/ccm-components/voting/voting_datastore.js' ]
         }
